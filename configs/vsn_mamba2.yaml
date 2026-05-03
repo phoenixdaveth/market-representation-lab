@@ -1,0 +1,22 @@
+seed: 7
+data:
+  spot_path: data/raw/nifty_spot_1m.csv
+  futures_path: data/raw/nifty_futures_1m.csv
+  expiry_calendar_path: data/raw/expiry_calendar.csv
+  holiday_calendar_path: data/raw/holiday_calendar.csv
+  seq_len: 128
+model:
+  name: VSNMamba2Encoder
+  num_features: 23
+  d_model: 64
+  num_layers: 2
+  expansion: 2
+  kernel_size: 5
+  dropout: 0.1
+training:
+  batch_size: 128
+  epochs: 10
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  val_fraction: 0.2
+  max_grad_norm: 1.0
