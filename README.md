@@ -4,6 +4,19 @@ Experimental research sandbox for neural sequence models on NIFTY spot and NIFTY
 
 This repo is intentionally separate from any production quant or execution system. It is for hidden feature extraction, latent market-state learning, pattern discovery, and learned signal research only.
 
+## Project Aim
+
+The goal is to learn useful latent representations of market state from numeric NIFTY spot and futures sequences. The workflow is:
+
+- align spot and futures market data on a 1-minute exchange-session grid
+- build deterministic numeric features for returns, basis, volatility, open interest, expiry, and session context
+- train sequence encoders to predict short-horizon forward market statistics
+- extract hidden states from trained models
+- cluster hidden states into candidate market regimes
+- run simple research-only signal tests from predictions or cluster assignments
+
+This is best described as a market representation learning sandbox using LSTM baselines and lightweight Mamba-inspired numeric sequence blocks.
+
 ## Boundaries
 
 - No live trading.
@@ -11,6 +24,15 @@ This repo is intentionally separate from any production quant or execution syste
 - No pretrained Mamba language-model checkpoints.
 - No tokenizing financial data as text.
 - Mamba-style modules here are small numeric sequence blocks that consume tensors shaped `[batch, seq_len, num_features]`.
+- The current Mamba2 and Mamba3 modules are inspired by Mamba-style sequence mixing, but they are not official `mamba-ssm` implementations.
+
+## Mamba Faithfulness Note
+
+The `Mamba2Encoder` and `Mamba3Encoder` classes in this repo are experimental, from-scratch PyTorch blocks for numeric time-series tensors. They use ideas such as gated projections, causal depthwise convolution, residual mixing, normalization, and multi-scale filters.
+
+They do not currently implement the official Mamba-2 or Mamba-3 algorithms from `state-spaces/mamba`. In particular, the current blocks do not use the official selective scan or SSD kernels, `d_state`/`headdim` state parameterization, Mamba-3 SISO/MIMO recurrence, complex-valued state updates, fused CUDA/Triton kernels, pretrained language-model checkpoints, or token-generation code.
+
+This is intentional for now: the first objective is to create a Windows-friendly research scaffold for market representation experiments. A future Linux/CUDA path can add an `OfficialMamba3Encoder` backed by `mamba_ssm.Mamba3` for closer architectural fidelity.
 
 ## Data Layout
 
